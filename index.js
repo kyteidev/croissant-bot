@@ -2,10 +2,39 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits, MessageFlags } = require('discord.js');
+const Sequelize = require('sequelize');
 const { token } = require('./config.json');
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+
+// Load database
+const sequelize = new Sequelize('database', 'user', 'password', {
+	host: 'localhost',
+	dialect: 'sqlite',
+	logging: false,
+	storage: 'database.sqlite',
+});
+
+// Define croissants database
+const Croissants = sequelize.define('croissants', {
+	username: {
+		type: Sequelize.STRING,
+		unique: true,
+	},
+	croissant_count: {
+		type: Sequelize.INTEGER,
+		defaultValue: 0,
+		allowNull: false,
+	},
+    last_bought: {
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+});
+
+exports.Croissants = Croissants;
+
 
 // Load command files
 client.commands = new Collection();
@@ -30,6 +59,7 @@ for (const folder of commandFolders) {
 
 // When the client is ready, run this code (only once).
 client.once(Events.ClientReady, readyClient => {
+    Croissants.sync({ force: true });
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
 
