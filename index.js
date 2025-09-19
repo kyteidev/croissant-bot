@@ -31,6 +31,11 @@ const Croissants = sequelize.define('croissants', {
         type: Sequelize.DATE,
         allowNull: true,
     },
+	buy_streak: {
+		type: Sequelize.INTEGER,
+		defaultValue: 0,
+		allowNull: false,
+	},
 });
 
 exports.Croissants = Croissants;
