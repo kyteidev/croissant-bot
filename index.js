@@ -65,7 +65,9 @@ for (const folder of commandFolders) {
 
 // When the client is ready, run this code (only once).
 client.once(Events.ClientReady, readyClient => {
-    Croissants.sync({ force: true });
+    // eslint-disable-next-line no-undef
+    const forceSync = process.env.DEV === '1';
+    Croissants.sync({ force: forceSync });
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
 
