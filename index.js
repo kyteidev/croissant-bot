@@ -39,6 +39,7 @@ exports.Croissants = Croissants;
 // Load command files
 client.commands = new Collection();
 
+// eslint-disable-next-line no-undef
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
 
