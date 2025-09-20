@@ -1,9 +1,9 @@
 // Require the necessary discord.js classes
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, Events, GatewayIntentBits, MessageFlags } = require('discord.js');
+const { ActivityType, Client, Collection, Events, GatewayIntentBits, MessageFlags } = require('discord.js');
 const Sequelize = require('sequelize');
-const { token } = require('./config.json');
+require("dotenv").config();
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -65,13 +65,19 @@ for (const folder of commandFolders) {
 
 // When the client is ready, run this code (only once).
 client.once(Events.ClientReady, readyClient => {
+	client.user.setActivity('munching on croissants 🥐', { type: ActivityType.Custom });
+
     // eslint-disable-next-line no-undef
     const forceSync = process.env.DEV === '1';
+	console.log("Development mode:", forceSync);
+	console.log("Syncing database...");
     Croissants.sync({ force: forceSync });
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
 
 // Log in to Discord with your client's token
+// eslint-disable-next-line no-undef
+const token = process.env.TOKEN;
 client.login(token);
 
 client.on(Events.InteractionCreate, async interaction => {

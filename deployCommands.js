@@ -1,5 +1,4 @@
 const { REST, Routes } = require('discord.js');
-const { clientId, token } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -26,12 +25,17 @@ for (const folder of commandFolders) {
 }
 
 // Construct and prepare an instance of the REST module
+// eslint-disable-next-line no-undef
+const token = process.env.TOKEN;
 const rest = new REST().setToken(token);
 
 // and deploy your commands!
 (async () => {
 	try {
 		console.log(`Started refreshing ${commands.length} application (/) commands.`);
+
+		// eslint-disable-next-line no-undef
+		const clientId = process.env.CLIENTID;
 
 		// The put method is used to fully refresh all commands in the guild with the current set
 		const data = await rest.put(
